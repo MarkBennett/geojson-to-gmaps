@@ -15,9 +15,10 @@
        return JSON.parse(JSON.stringify(original));
     }
 
-    function GeojsonToGmaps(geojson, gmap, gmap_options) {
+    function GeojsonToGmaps(geojson, gmap, gmap_options, event_handlers) {
         var coordinates = geojson_coordinates_to_gmaps(geojson.coordinates);
         var options;
+        var polyline;
 
         if (gmap_options === undefined) {
             options = clone(GeojsonToGmaps.DEFAULT_GMAP_OPTIONS);
@@ -32,7 +33,14 @@
         options.path = coordinates;
         options.map = gmap;
 
-        new google.maps.Polyline(options);
+        polyline = new google.maps.Polyline(options);
+
+        if (event_handlers !== undefined) {
+            for (var event_name in event_handlers) {
+                google.maps.addListener(
+                        polyline, event_name, event_handlers[event_name]);
+            }
+        }
     }
 
     GeojsonToGmaps.VERSION = "0.0.0";

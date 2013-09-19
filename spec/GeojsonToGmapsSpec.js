@@ -1,9 +1,4 @@
 describe("GeojsonToGmaps()", function() {
-    beforeEach(function() {
-        window.google = {};
-        window.google.maps = jasmine.createSpyObj("maps", ["Polyline"]);
-    });
-
     var line_string = {
         "type": "LineString",
         "coordinates": [
@@ -11,6 +6,13 @@ describe("GeojsonToGmaps()", function() {
         ]
     };
     var gmap = {};
+    var polyline = {};
+
+    beforeEach(function() {
+        window.google = {};
+        window.google.maps = {};
+        window.google.maps.Polyline = jasmine.createSpy("Polyline").andReturn(polyline);
+    });
 
     it("adds a GeoJSON LineString to the Google Map", function() {
         var options = {
@@ -55,6 +57,20 @@ describe("GeojsonToGmaps()", function() {
         expect(options_func).toHaveBeenCalled();
         expect(window.google.maps.Polyline).
             toHaveBeenCalledWith(func_ret_options);
+    });
+
+    it("adds a GeoJSON LineString with a click handler", function() {
+        var click_handler = jasmine.createSpy('click_handler');
+
+        var event_handlers = {
+            click: click_handler
+        }
+
+        google.maps.addListener = jasmine.createSpy('addListener');
+
+        GeojsonToGmaps(line_string, gmap, {}, event_handlers);
+
+        expect(google.maps.addListener).toHaveBeenCalledWith(polyline, 'click', click_handler);
     });
 
     it("adds a GeoJSON Feature to the Google Map");
