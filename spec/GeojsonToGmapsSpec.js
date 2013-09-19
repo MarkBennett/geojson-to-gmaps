@@ -6,7 +6,7 @@ describe("GeojsonToGmaps()", function() {
     });
 
     describe("LineString", function() {
-        var line_string
+        var line_string;
         var gmap;
         var polyline;
 
@@ -103,13 +103,30 @@ describe("GeojsonToGmaps()", function() {
         });
 
         it("adds a GeoJSON Feature to the Google Map", function() {
-            GeojsonToGmaps(feature, gmap);
+            var options = {
+                strokeColor: 'purple'
+            };
+            var expected_options =
+                _.extend(options, {
+                    path: [
+                        [0.0, 102.0], [1.0, 103.0], [0.0, 104.0], [1.0, 105.0]
+                    ],
+                    map: gmap
+                });
 
-            expect(google.maps.Polyline).toHaveBeenCalled();
+            GeojsonToGmaps(feature, gmap, options);
+
+            expect(google.maps.Polyline).toHaveBeenCalledWith(expected_options);
         });
+
+        it("raises an error if the properties are missing");
     });
 
     describe("FeatureCollection", function() {
         it("adds a GeoJSON FeatureCollection to the Google Map");
     });
+
+    it("raises an error if the type is unknown");
+    it("raises an error if the type is missing");
+    it("raises an error if the geometry is missing");
 });
