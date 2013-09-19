@@ -5,7 +5,7 @@ module.exports = function(grunt) {
         pkg: grunt.file.readJSON('package.json'),
         jasmine: {
             geojson_to_gmaps: {
-                src: 'src/**/*.js',
+                src: 'geojson-to-gmaps.js',
                 options: {
                     specs: 'spec/*Spec.js',
                     helpers: 'spec/*Helper.js',
@@ -15,12 +15,20 @@ module.exports = function(grunt) {
         },
         jshint: {
             all: ['Gruntfile.js', 'src/**/*.js', 'spec/**/*.js']
+        },
+        uglify: {
+            my_target: {
+                files: {
+                    'geojson-to-gmaps.min.js': ['geojson-to-gmaps.js']
+                }
+            }
         }
     });
 
     // Load the plugin that provides the "uglify" task.
     grunt.loadNpmTasks('grunt-contrib-jasmine');
     grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-contrib-uglify');
 
     // Default task(s).
     grunt.registerTask('default', ['jasmine']);
