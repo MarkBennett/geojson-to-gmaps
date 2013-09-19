@@ -16,7 +16,7 @@
     }
 
     function GeojsonToGmaps(geojson, gmap, gmap_options, event_handlers) {
-        var coordinates = geojson_coordinates_to_gmaps(geojson.coordinates);
+        var coordinates;
         var options;
         var polyline;
         var handler_function;
@@ -31,21 +31,29 @@
             }
         }
 
-        options.path = coordinates;
-        options.map = gmap;
+        switch (geojson.type) {
+            case "LineString":
+                coordinates = geojson_coordinates_to_gmaps(geojson.coordinates);
+                options.path = coordinates;
+                options.map = gmap;
 
-        polyline = new google.maps.Polyline(options);
+                polyline = new google.maps.Polyline(options);
 
-        if (event_handlers !== undefined) {
-            for (var event_name in event_handlers) {
-                handler_function = function() {
-                    var event_handler = event_handlers[event_name];
-                    var args = Array.prototype.splice(0, 0, polyline);
-                    return event_handler.apply(this, args);
-                };
-                google.maps.addListener(
-                        polyline, event_name, handler_function);
-            }
+                if (event_handlers !== undefined) {
+                    for (var event_name in event_handlers) {
+                        handler_function = function() {
+                            var event_handler = event_handlers[event_name];
+                            var args = Array.prototype.splice(0, 0, polyline);
+                            return event_handler.apply(this, args);
+                        };
+                        google.maps.addListener(
+                                polyline, event_name, handler_function);
+                    }
+                }
+                break;
+            case "Feature":
+                GeojsonToGmaps(geojson.geometry, gmap, gmap_options, event_handlers);
+                break;
         }
     }
 
