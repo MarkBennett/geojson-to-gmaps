@@ -15,6 +15,26 @@
        return JSON.parse(JSON.stringify(original));
     }
 
+    function addLineString(geojson, geojson_coordinates, gmap, options, event_handlers) {
+        coordinates = geojson_coordinates_to_gmaps(geojson_coordinates);
+        options.path = coordinates;
+        options.map = gmap;
+
+        polyline = new google.maps.Polyline(options);
+
+        if (event_handlers !== undefined) {
+            for (var event_name in event_handlers) {
+                handler_function = function() {
+                    var event_handler = event_handlers[event_name];
+                    var args = Array.prototype.splice(0, 0, geojson);
+                    return event_handler.apply(this, args);
+                };
+                google.maps.addListener(
+                        polyline, event_name, handler_function);
+            }
+        }
+    };
+
     function GeojsonToGmaps(geojson, gmap, gmap_options, event_handlers) {
         var coordinates;
         var options;
@@ -35,22 +55,13 @@
 
         switch (geojson.type) {
             case "LineString":
-                coordinates = geojson_coordinates_to_gmaps(geojson.coordinates);
-                options.path = coordinates;
-                options.map = gmap;
-
-                polyline = new google.maps.Polyline(options);
-
-                if (event_handlers !== undefined) {
-                    for (var event_name in event_handlers) {
-                        handler_function = function() {
-                            var event_handler = event_handlers[event_name];
-                            var args = Array.prototype.splice(0, 0, polyline);
-                            return event_handler.apply(this, args);
-                        };
-                        google.maps.addListener(
-                                polyline, event_name, handler_function);
-                    }
+                addLineString(geojson, geojson.coordinates,
+                        gmap, options, event_handlers);
+                break;
+            case "MultiLineString":
+                for (i = 0; i < geojson.coordinates.length; i++) {
+                    addLineString(geojson, geojson.coordinates[i],
+                            gmap, options, event_handlers);
                 }
                 break;
             case "Feature":

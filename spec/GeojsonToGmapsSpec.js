@@ -85,6 +85,45 @@ describe("GeojsonToGmaps()", function() {
         });
     });
 
+    describe("MultiLineString", function() {
+        var multilinestring;
+
+        beforeEach(function() {
+            multilinestring = {
+                "type": "MultiLineString",
+                "coordinates": [
+                    [ [100.0, 0.0], [101.0, 1.0] ],
+                    [ [102.0, 2.0], [103.0, 3.0] ]
+                ]
+            };
+        });
+
+        it("adds a GeoJSON MultiLineString to the Google Map", function() {
+            var options = {
+                strokeColor: 'pink'
+            };
+            var expected_options_1 =
+                _.extend(options, {
+                    path: [
+                        [0.0, 100.0], [1.0, 101.0]
+                    ],
+                    map: gmap
+                });
+            var expected_options_2 =
+                _.extend(options, {
+                    path: [
+                        [2.0, 102.0], [3.0, 103.0]
+                    ],
+                    map: gmap
+                });
+
+            GeojsonToGmaps(multilinestring, gmap, options);
+
+            expect(google.maps.Polyline).toHaveBeenCalledWith(expected_options_1);
+            expect(google.maps.Polyline).toHaveBeenCalledWith(expected_options_2);
+        });
+    });
+
     describe("Feature", function() {
         var feature;
 
