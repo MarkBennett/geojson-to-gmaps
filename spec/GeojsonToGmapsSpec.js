@@ -64,13 +64,13 @@ describe("GeojsonToGmaps()", function() {
 
         var event_handlers = {
             click: click_handler
-        }
+        };
 
         google.maps.addListener = jasmine.createSpy('addListener');
 
         GeojsonToGmaps(line_string, gmap, {}, event_handlers);
 
-        expect(google.maps.addListener).toHaveBeenCalledWith(polyline, 'click', click_handler);
+        expect(google.maps.addListener).toHaveBeenCalledWith(polyline, 'click', jasmine.any(Function));
     });
 
     it("adds a GeoJSON Feature to the Google Map");

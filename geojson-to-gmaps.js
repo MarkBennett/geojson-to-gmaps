@@ -19,6 +19,7 @@
         var coordinates = geojson_coordinates_to_gmaps(geojson.coordinates);
         var options;
         var polyline;
+        var handler_function;
 
         if (gmap_options === undefined) {
             options = clone(GeojsonToGmaps.DEFAULT_GMAP_OPTIONS);
@@ -37,8 +38,13 @@
 
         if (event_handlers !== undefined) {
             for (var event_name in event_handlers) {
+                handler_function = function() {
+                    var event_handler = event_handlers[event_name];
+                    var args = Array.prototype.splice(0, 0, polyline);
+                    return event_handler.apply(this, args);
+                };
                 google.maps.addListener(
-                        polyline, event_name, event_handlers[event_name]);
+                        polyline, event_name, handler_function);
             }
         }
     }
