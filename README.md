@@ -9,3 +9,4 @@ It supports adding the following GeoJSON geometries:
  1. Feature
  2. FeauteCollection
  3. LineString
+ 4. MultiLineString
