@@ -11,8 +11,16 @@
         return gmap_coords;
     }
 
+    function clone(original) {
+       return JSON.parse(JSON.stringify(original));
+    }
+
     function GeojsonToGmaps(geojson, gmap, options) {
         var coordinates = geojson_coordinates_to_gmaps(geojson.coordinates);
+
+        if (options === undefined) {
+            options = clone(GeojsonToGmaps.DEFAULT_OPTIONS);
+        }
 
         options.path = coordinates;
         options.map = gmap;
@@ -21,6 +29,9 @@
     }
 
     GeojsonToGmaps.VERSION = "0.0.0";
+    GeojsonToGmaps.DEFAULT_OPTIONS = {
+        strokeColor: 'blue'
+    };
 
     window.GeojsonToGmaps = GeojsonToGmaps;
 }());
