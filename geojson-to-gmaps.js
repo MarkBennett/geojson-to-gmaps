@@ -49,7 +49,7 @@
         }
     }
 
-    GeojsonToGmaps.VERSION = "0.0.0";
+    GeojsonToGmaps.VERSION = "0.1.0";
     GeojsonToGmaps.DEFAULT_GMAP_OPTIONS = {
         strokeColor: 'blue'
     };
