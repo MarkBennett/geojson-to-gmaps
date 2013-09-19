@@ -11,13 +11,13 @@
         return gmap_coords;
     }
 
-    function GeojsonToGmaps(geojson, gmap) {
+    function GeojsonToGmaps(geojson, gmap, options) {
         var coordinates = geojson_coordinates_to_gmaps(geojson.coordinates);
 
-        new google.maps.Polyline({
-            path: coordinates,
-            map: gmap
-        });
+        options.path = coordinates;
+        options.map = gmap;
+
+        new google.maps.Polyline(options);
     }
 
     GeojsonToGmaps.VERSION = "0.0.0";
