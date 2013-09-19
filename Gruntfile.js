@@ -33,6 +33,6 @@ module.exports = function(grunt) {
     // Default task(s).
     grunt.registerTask('default', ['jasmine']);
 
-    grunt.registerTask('build', 'Build a release', ['jasmine', 'uglify']);
+    grunt.registerTask('build', 'Build a release.', ['jasmine', 'uglify']);
 
 };
