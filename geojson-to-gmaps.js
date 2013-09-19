@@ -20,6 +20,8 @@
         var options;
         var polyline;
         var handler_function;
+        var i;
+        var feature;
 
         if (gmap_options === undefined) {
             options = clone(GeojsonToGmaps.DEFAULT_GMAP_OPTIONS);
@@ -53,6 +55,12 @@
                 break;
             case "Feature":
                 GeojsonToGmaps(geojson.geometry, gmap, gmap_options, event_handlers);
+                break;
+            case "FeatureCollection":
+                for (i = 0; i < geojson.features.length; i++) {
+                    feature = geojson.features[i];
+                    GeojsonToGmaps(feature, gmap, gmap_options, event_handlers);
+                }
                 break;
         }
     }
