@@ -17,6 +17,9 @@ module.exports = function(grunt) {
             all: ['Gruntfile.js', 'src/**/*.js', 'spec/**/*.js']
         },
         uglify: {
+            options: {
+                banner: "/***\n\ngeojson-to-gmaps.js\n\n" + grunt.file.read('LICENSE') + "\n\n***/\n"
+            },
             my_target: {
                 files: {
                     'geojson-to-gmaps.min.js': ['geojson-to-gmaps.js']
