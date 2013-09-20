@@ -16,7 +16,10 @@
     }
 
     function addLineString(geojson, geojson_coordinates, gmap, options, event_handlers) {
-        coordinates = geojson_coordinates_to_gmaps(geojson_coordinates);
+        var coordinates = geojson_coordinates_to_gmaps(geojson_coordinates);
+        var handler_function;
+        var polyline;
+
         options.path = coordinates;
         options.map = gmap;
 
@@ -33,13 +36,10 @@
                         polyline, event_name, handler_function);
             }
         }
-    };
+    }
 
     function GeojsonToGmaps(geojson, gmap, gmap_options, event_handlers) {
-        var coordinates;
         var options;
-        var polyline;
-        var handler_function;
         var i;
         var feature;
 
