@@ -14,7 +14,7 @@ module.exports = function(grunt) {
             }
         },
         jshint: {
-            all: ['Gruntfile.js', 'src/**/*.js', 'spec/**/*.js']
+            all: ['Gruntfile.js', 'geojson-to-gmaps.js', 'spec/**/*.js']
         },
         uglify: {
             options: {
