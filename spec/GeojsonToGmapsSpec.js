@@ -35,11 +35,19 @@ describe("GeojsonToGmaps()", function() {
                 ],
                 map: gmap
             });
+            var overlays;
 
-            GeojsonToGmaps(line_string, gmap, options);
+            overlays = GeojsonToGmaps(line_string, gmap, options);
 
             expect(window.google.maps.Polyline).
                 toHaveBeenCalledWith(expected_options);
+        });
+
+        it("returns added LineString overlays", function() {
+            var overlays = GeojsonToGmaps(line_string, gmap);
+
+            expect(overlays.length).toEqual(1);
+            expect(overlays[0]).toEqual(polyline);
         });
 
         it("adds a GeoJSON LineString with default gmap options when none are specified", function() {
@@ -122,6 +130,16 @@ describe("GeojsonToGmaps()", function() {
             expect(google.maps.Polyline).toHaveBeenCalledWith(expected_options_1);
             expect(google.maps.Polyline).toHaveBeenCalledWith(expected_options_2);
         });
+
+        it("return added LineString overlays", function() {
+            var overlays;
+
+            overlays = GeojsonToGmaps(multilinestring, gmap);
+
+            expect(overlays.length).toEqual(2);
+            expect(overlays[0]).toEqual(polyline);
+            expect(overlays[1]).toEqual(polyline);
+        });
     });
 
     describe("Feature", function() {
@@ -171,6 +189,15 @@ describe("GeojsonToGmaps()", function() {
             GeojsonToGmaps(feature, gmap, {}, event_handlers);
 
             expect(google.maps.addListener).toHaveBeenCalledWith(polyline, 'click', jasmine.any(Function));
+        });
+
+        it("returns added overlays", function() {
+            var overlays;
+
+            overlays = GeojsonToGmaps(feature, gmap);
+
+            expect(overlays.length).toEqual(1);
+            expect(overlays[0]).toEqual(polyline);
         });
     });
 
@@ -232,6 +259,15 @@ describe("GeojsonToGmaps()", function() {
             GeojsonToGmaps(feature_collection, gmap, options);
 
             expect(google.maps.Polyline).toHaveBeenCalledWith(expected_options);
+        });
+
+        it ("return the added overlays", function() {
+            var overlays;
+
+            overlays = GeojsonToGmaps(feature_collection, gmap);
+
+            expect(overlays.length).toEqual(1);
+            expect(overlays[0]).toEqual(polyline);
         });
     });
 

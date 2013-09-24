@@ -3,6 +3,7 @@
     // Handy utitlity functions
     var push = Array.prototype.push;
     var splice = Array.prototype.splice;
+    var concat = Array.prototype.concat;
 
     function geojson_coordinates_to_gmaps(geojson_coords) {
         var gmap_coords = new Array(geojson_coords.length);
@@ -36,6 +37,8 @@
                         polyline, event_name, handler_function);
             }
         }
+
+        return polyline;
     }
 
     // Given a function, return a new function that's binds an extra argument
@@ -52,6 +55,7 @@
         var options;
         var i;
         var feature;
+        var overlays = [];
 
         if (gmap_options === undefined) {
             options = clone(GeojsonToGmaps.DEFAULT_GMAP_OPTIONS);
@@ -65,25 +69,32 @@
 
         switch (geojson.type) {
             case "LineString":
-                addLineString(geojson, geojson.coordinates,
-                        gmap, options, event_handlers);
+                overlays.push(addLineString(geojson, geojson.coordinates,
+                        gmap, options, event_handlers));
                 break;
             case "MultiLineString":
                 for (i = 0; i < geojson.coordinates.length; i++) {
-                    addLineString(geojson, geojson.coordinates[i],
-                            gmap, options, event_handlers);
+                    overlays.push(addLineString(geojson,
+                            geojson.coordinates[i], gmap, options,
+                            event_handlers));
                 }
                 break;
             case "Feature":
-                GeojsonToGmaps(geojson.geometry, gmap, gmap_options, event_handlers);
+                overlays = overlays.concat(
+                        GeojsonToGmaps(geojson.geometry, gmap, gmap_options,
+                            event_handlers));
                 break;
             case "FeatureCollection":
                 for (i = 0; i < geojson.features.length; i++) {
                     feature = geojson.features[i];
-                    GeojsonToGmaps(feature, gmap, gmap_options, event_handlers);
+                    overlays = overlays.concat(
+                            GeojsonToGmaps(feature, gmap, gmap_options,
+                                event_handlers));
                 }
                 break;
         }
+
+        return overlays;
     }
 
     GeojsonToGmaps.VERSION = "0.1.0";
