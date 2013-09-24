@@ -1,0 +1,27 @@
+{
+  "name": "geojson-to-gmaps",
+  "main": "geojson-to-gmaps.js",
+  "version": "0.1.0",
+  "homepage": "https://github.com/MarkBennett/geojson-to-gmaps",
+  "authors": [
+    "Mark Bennett <mark@burmis.ca>"
+  ],
+  "description": "Map GeoJSON on Google Maps",
+  "keywords": [
+    "geojson",
+    "gis",
+    "geo",
+    "google",
+    "maps",
+    "map",
+    "json"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
