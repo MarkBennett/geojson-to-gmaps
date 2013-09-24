@@ -238,4 +238,17 @@ describe("GeojsonToGmaps()", function() {
     it("raises an error if the type is unknown");
     it("raises an error if the type is missing");
     it("raises an error if the geometry is missing");
+
+    describe("bind()", function() {
+        it('binds an extra argument when given a function', function() {
+            var test_func = jasmine.createSpy('test_func');
+            var extra_arg = 123;
+
+            var bound_func = GeojsonToGmaps.bind(test_func, extra_arg);
+
+            bound_func('abc');
+
+            expect(test_func).toHaveBeenCalledWith('abc', 123);
+        });
+    });
 });

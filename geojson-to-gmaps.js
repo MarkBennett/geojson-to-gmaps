@@ -1,5 +1,9 @@
 (function() {
 
+    // Handy utitlity functions
+    var push = Array.prototype.push;
+    var splice = Array.prototype.splice;
+
     function geojson_coordinates_to_gmaps(geojson_coords) {
         var gmap_coords = new Array(geojson_coords.length);
         var i;
@@ -27,15 +31,21 @@
 
         if (event_handlers !== undefined) {
             for (var event_name in event_handlers) {
-                handler_function = function() {
-                    var event_handler = event_handlers[event_name];
-                    var args = Array.prototype.splice(0, 0, geojson);
-                    return event_handler.apply(this, args);
-                };
+                handler_function = bind(event_handlers[event_name], geojson);
                 google.maps.addListener(
                         polyline, event_name, handler_function);
             }
         }
+    }
+
+    // Given a function, return a new function that's binds an extra argument
+    // to it's argument list when invoked
+    function bind(func, extra_arg) {
+        return (function() {
+            var args = splice.call(arguments, 0); 
+            args.push(extra_arg);
+            return func.apply(this, args);
+        });
     }
 
     function GeojsonToGmaps(geojson, gmap, gmap_options, event_handlers) {
@@ -80,6 +90,8 @@
     GeojsonToGmaps.DEFAULT_GMAP_OPTIONS = {
         strokeColor: 'blue'
     };
+
+    GeojsonToGmaps.bind = bind;
 
     window.GeojsonToGmaps = GeojsonToGmaps;
 }());
