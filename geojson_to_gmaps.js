@@ -97,7 +97,7 @@
         return overlays;
     }
 
-    geojson_to_gmaps.VERSION = "0.2.0";
+    geojson_to_gmaps.VERSION = "0.3.0";
     geojson_to_gmaps.DEFAULT_GMAP_OPTIONS = {
         strokeColor: 'blue'
     };
