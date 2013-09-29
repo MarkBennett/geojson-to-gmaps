@@ -1,7 +1,4 @@
 (function () {
-  
-  
-
     // Handy utitlity functions
     var push = Array.prototype.push;
     var splice = Array.prototype.splice;
@@ -12,7 +9,8 @@
         var i;
 
         for (i=0; i < geojson_coords.length; i++) {
-            gmap_coords[i] = [ geojson_coords[i][1], geojson_coords[i][0] ];
+            gmap_coords[i] =
+                new google.maps.LatLng(geojson_coords[i][1], geojson_coords[i][0]);
         }
 
         return gmap_coords;

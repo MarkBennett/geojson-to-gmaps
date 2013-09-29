@@ -2,6 +2,20 @@ describe("geojson_to_gmaps()", function() {
     var gmap;
     var polyline;
 
+    // Handy Google Map Samples
+    var SAMPLE_PATH_GMAPS_1;
+    var SAMPLE_PATH_GEOJSON_1;
+
+    var SAMPLE_PATH_GMAPS_2;
+    var SAMPLE_PATH_GEOJSON_2;
+
+    var SAMPLE_PATH_GMAPS_3;
+    var SAMPLE_PATH_GEOJSON_3;
+
+    function fakeLatLng(lat, lng) {
+        return  { lat: lat, lng: lng };
+    }
+
     beforeEach(function() {
         gmap = {};
         polyline = {};
@@ -9,6 +23,38 @@ describe("geojson_to_gmaps()", function() {
         window.google = {};
         window.google.maps = {};
         window.google.maps.Polyline = jasmine.createSpy("Polyline").andReturn(polyline);
+        window.google.maps.LatLng = jasmine.createSpy("LatLng").andCallFake(fakeLatLng);
+
+        SAMPLE_PATH_GMAPS_1 = [
+            new google.maps.LatLng(0.0, 102.0),
+            new google.maps.LatLng(1.0, 103.0),
+            new google.maps.LatLng(0.0, 104.0),
+            new google.maps.LatLng(1.0, 105.0)
+        ];
+        SAMPLE_PATH_GEOJSON_1 = [
+            [ 102.0, 0.0 ],
+            [ 103.0, 1.0 ],
+            [ 104.0, 0.0 ],
+            [ 105.0, 1.0 ]
+        ];
+
+        SAMPLE_PATH_GMAPS_2 = [
+            new google.maps.LatLng(100.0, 0.0),
+            new google.maps.LatLng(101.0, 1.0)
+        ];
+        SAMPLE_PATH_GEOJSON_2 = [
+            [ 0.0, 100],
+            [ 1.0, 101]
+        ];
+
+        SAMPLE_PATH_GMAPS_3 = [
+            new google.maps.LatLng(102.0, 2.0),
+            new google.maps.LatLng(103.0, 3.0)
+        ];
+        SAMPLE_PATH_GEOJSON_3 = [
+            [ 2.0, 102.0 ],
+            [ 3.0, 103.0 ]
+        ];
     });
 
     describe("LineString", function() {
@@ -19,9 +65,7 @@ describe("geojson_to_gmaps()", function() {
 
             line_string = {
                 "type": "LineString",
-                "coordinates": [
-                    [102.0, 0.0], [103.0, 1.0], [104.0, 0.0], [105.0, 1.0]
-                ]
+                "coordinates": SAMPLE_PATH_GEOJSON_1
             };
         });
 
@@ -30,9 +74,7 @@ describe("geojson_to_gmaps()", function() {
                 strokeColor: 'red'
             };
             var expected_options = _.extend(options, {
-                path: [
-                    [0.0, 102.0], [1.0, 103.0], [0.0, 104.0], [1.0, 105.0]
-                ],
+                path: SAMPLE_PATH_GMAPS_1,
                 map: gmap
             });
             var overlays;
@@ -52,9 +94,7 @@ describe("geojson_to_gmaps()", function() {
 
         it("adds a GeoJSON LineString with default gmap options when none are specified", function() {
             var expected_options = _.extend(geojson_to_gmaps.DEFAULT_GMAP_OPTIONS, {
-                path: [
-                    [0.0, 102.0], [1.0, 103.0], [0.0, 104.0], [1.0, 105.0]
-                ],
+                path: SAMPLE_PATH_GMAPS_1,
                 map: gmap
             });
 
@@ -100,8 +140,8 @@ describe("geojson_to_gmaps()", function() {
             multilinestring = {
                 "type": "MultiLineString",
                 "coordinates": [
-                    [ [100.0, 0.0], [101.0, 1.0] ],
-                    [ [102.0, 2.0], [103.0, 3.0] ]
+                    SAMPLE_PATH_GEOJSON_2,
+                    SAMPLE_PATH_GEOJSON_3
                 ]
             };
         });
@@ -112,16 +152,12 @@ describe("geojson_to_gmaps()", function() {
             };
             var expected_options_1 =
                 _.extend(options, {
-                    path: [
-                        [0.0, 100.0], [1.0, 101.0]
-                    ],
+                    path: SAMPLE_PATH_GMAPS_2,
                     map: gmap
                 });
             var expected_options_2 =
                 _.extend(options, {
-                    path: [
-                        [2.0, 102.0], [3.0, 103.0]
-                    ],
+                    path: SAMPLE_PATH_GMAPS_3,
                     map: gmap
                 });
 
@@ -149,9 +185,7 @@ describe("geojson_to_gmaps()", function() {
             feature = { "type": "Feature",
                 "geometry": {
                     "type": "LineString",
-                    "coordinates": [
-                        [102.0, 0.0], [103.0, 1.0], [104.0, 0.0], [105.0, 1.0]
-                    ]
+                    "coordinates": SAMPLE_PATH_GEOJSON_1
                 },
                 "properties": {
                     "prop0": "value0",
@@ -166,9 +200,7 @@ describe("geojson_to_gmaps()", function() {
             };
             var expected_options =
                 _.extend(options, {
-                    path: [
-                        [0.0, 102.0], [1.0, 103.0], [0.0, 104.0], [1.0, 105.0]
-                    ],
+                    path: SAMPLE_PATH_GMAPS_1,
                     map: gmap
                 });
 
@@ -217,9 +249,7 @@ describe("geojson_to_gmaps()", function() {
                         "type": "Feature",
                         "geometry": {
                             "type": "LineString",
-                            "coordinates": [
-                                [102.0, 0.0], [103.0, 1.0], [104.0, 0.0], [105.0, 1.0]
-                            ]
+                            "coordinates": SAMPLE_PATH_GEOJSON_1
                         },
                         "properties": {
                             "prop0": "value0",
@@ -250,9 +280,7 @@ describe("geojson_to_gmaps()", function() {
             };
             var expected_options =
                 _.extend(options, {
-                    path: [
-                        [0.0, 102.0], [1.0, 103.0], [0.0, 104.0], [1.0, 105.0]
-                    ],
+                    path: SAMPLE_PATH_GMAPS_1,
                     map: gmap
                 });
 
