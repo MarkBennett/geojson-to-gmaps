@@ -1,4 +1,6 @@
-(function() {
+(function () {
+  
+  
 
     // Handy utitlity functions
     var push = Array.prototype.push;
@@ -51,14 +53,14 @@
         });
     }
 
-    function GeojsonToGmaps(geojson, gmap, gmap_options, event_handlers) {
+    function geojson_to_gmaps(geojson, gmap, gmap_options, event_handlers) {
         var options;
         var i;
         var feature;
         var overlays = [];
 
         if (gmap_options === undefined) {
-            options = clone(GeojsonToGmaps.DEFAULT_GMAP_OPTIONS);
+            options = clone(geojson_to_gmaps.DEFAULT_GMAP_OPTIONS);
         } else {
             if (gmap_options.apply !== undefined) {
                 options = gmap_options(geojson);
@@ -81,14 +83,14 @@
                 break;
             case "Feature":
                 overlays = overlays.concat(
-                        GeojsonToGmaps(geojson.geometry, gmap, gmap_options,
+                        geojson_to_gmaps(geojson.geometry, gmap, gmap_options,
                             event_handlers));
                 break;
             case "FeatureCollection":
                 for (i = 0; i < geojson.features.length; i++) {
                     feature = geojson.features[i];
                     overlays = overlays.concat(
-                            GeojsonToGmaps(feature, gmap, gmap_options,
+                            geojson_to_gmaps(feature, gmap, gmap_options,
                                 event_handlers));
                 }
                 break;
@@ -97,12 +99,12 @@
         return overlays;
     }
 
-    GeojsonToGmaps.VERSION = "0.1.0";
-    GeojsonToGmaps.DEFAULT_GMAP_OPTIONS = {
+    geojson_to_gmaps.VERSION = "0.1.0";
+    geojson_to_gmaps.DEFAULT_GMAP_OPTIONS = {
         strokeColor: 'blue'
     };
 
-    GeojsonToGmaps.bind = bind;
+    geojson_to_gmaps.bind = bind;
 
-    window.GeojsonToGmaps = GeojsonToGmaps;
+    window.geojson_to_gmaps = geojson_to_gmaps;
 }());

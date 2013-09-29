@@ -1,5 +1,5 @@
 {
-  "name": "geojson-to-gmaps",
+  "name": "geojson_to_gmaps",
   "version": "0.1.0",
   "description": "Render GeoJSON on your Google Map.",
   "main": "index.js",

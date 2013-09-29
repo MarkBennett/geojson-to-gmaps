@@ -5,24 +5,24 @@ module.exports = function(grunt) {
         pkg: grunt.file.readJSON('package.json'),
         jasmine: {
             geojson_to_gmaps: {
-                src: 'geojson-to-gmaps.js',
+                src: 'geojson_to_gmaps.js',
                 options: {
-                    specs: 'spec/*Spec.js',
+                    specs: 'spec/*_spec.js',
                     helpers: 'spec/*Helper.js',
                     vendor: 'vendor/*.js'
                 }
             }
         },
         jshint: {
-            all: ['Gruntfile.js', 'geojson-to-gmaps.js', 'spec/**/*.js']
+            all: ['Gruntfile.js', 'geojson_to_gmaps.js', 'spec/**/*.js']
         },
         uglify: {
             options: {
-                banner: "/***\n\ngeojson-to-gmaps.js\n\n" + grunt.file.read('LICENSE') + "\n\n***/\n"
+                banner: "/***\n\ngeojson_to_gmaps.js\n\n" + grunt.file.read('LICENSE') + "\n\n***/\n"
             },
             my_target: {
                 files: {
-                    'geojson-to-gmaps.min.js': ['geojson-to-gmaps.js']
+                    'geojson_to_gmaps.min.js': ['geojson_to_gmaps.js']
                 }
             }
         }
