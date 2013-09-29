@@ -51,28 +51,36 @@
         });
     }
 
-    function geojson_to_gmaps(geojson, gmap, gmap_options, event_handlers) {
+    function determine_options(gmap_options, current_feature) {
         var options;
-        var i;
-        var feature;
-        var overlays = [];
 
         if (gmap_options === undefined) {
             options = clone(geojson_to_gmaps.DEFAULT_GMAP_OPTIONS);
         } else {
             if (gmap_options.apply !== undefined) {
-                options = gmap_options(geojson);
+                options = gmap_options(current_feature);
             } else {
                 options = clone(gmap_options);
             }
         }
 
+        return options;
+    }
+
+    function geojson_to_gmaps(geojson, gmap, gmap_options, event_handlers, current_feature) {
+        var options;
+        var i;
+        var feature;
+        var overlays = [];
+
         switch (geojson.type) {
             case "LineString":
+                options = determine_options(gmap_options, current_feature);
                 overlays.push(addLineString(geojson, geojson.coordinates,
                         gmap, options, event_handlers));
                 break;
             case "MultiLineString":
+                options = determine_options(gmap_options, current_feature);
                 for (i = 0; i < geojson.coordinates.length; i++) {
                     overlays.push(addLineString(geojson,
                             geojson.coordinates[i], gmap, options,
@@ -82,7 +90,7 @@
             case "Feature":
                 overlays = overlays.concat(
                         geojson_to_gmaps(geojson.geometry, gmap, gmap_options,
-                            event_handlers));
+                            event_handlers, geojson));
                 break;
             case "FeatureCollection":
                 for (i = 0; i < geojson.features.length; i++) {
@@ -97,7 +105,7 @@
         return overlays;
     }
 
-    geojson_to_gmaps.VERSION = "0.3.0";
+    geojson_to_gmaps.VERSION = "0.4.0";
     geojson_to_gmaps.DEFAULT_GMAP_OPTIONS = {
         strokeColor: 'blue'
     };

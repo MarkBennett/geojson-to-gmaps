@@ -113,7 +113,8 @@ describe("geojson_to_gmaps()", function() {
 
             geojson_to_gmaps(line_string, gmap, options_func);
 
-            expect(options_func).toHaveBeenCalled();
+            expect(options_func.calls.length).toEqual(1);
+            expect(options_func).toHaveBeenCalledWith(undefined);
             expect(window.google.maps.Polyline).
                 toHaveBeenCalledWith(func_ret_options);
         });
@@ -167,6 +168,33 @@ describe("geojson_to_gmaps()", function() {
             expect(google.maps.Polyline).toHaveBeenCalledWith(expected_options_2);
         });
 
+        it("adds a GeoJSON LineString with options returned from a function", function() {
+            var func_ret_options = {
+                strokeColor: 'yellow'
+            };
+            var options_func =
+                jasmine.createSpy('options_func').andReturn(func_ret_options);
+
+            var expected_options_1 =
+                _.extend(func_ret_options, {
+                    path: SAMPLE_PATH_GMAPS_2,
+                    map: gmap
+                });
+            var expected_options_2 =
+                _.extend(func_ret_options, {
+                    path: SAMPLE_PATH_GMAPS_3,
+                    map: gmap
+                });
+
+            geojson_to_gmaps(multilinestring, gmap, options_func);
+
+            expect(options_func.calls.length).toEqual(1);
+            expect(options_func).toHaveBeenCalledWith(undefined);
+
+            expect(google.maps.Polyline).toHaveBeenCalledWith(expected_options_1);
+            expect(google.maps.Polyline).toHaveBeenCalledWith(expected_options_2);
+        });
+
         it("return added LineString overlays", function() {
             var overlays;
 
@@ -205,6 +233,27 @@ describe("geojson_to_gmaps()", function() {
                 });
 
             geojson_to_gmaps(feature, gmap, options);
+
+            expect(google.maps.Polyline).toHaveBeenCalledWith(expected_options);
+        });
+
+        it("adds a GeoJSON Feature with options returned from a function", function() {
+            var func_ret_options = {
+                strokeColor: 'yellow'
+            };
+            var options_func =
+                jasmine.createSpy('options_func').andReturn(func_ret_options);
+
+            var expected_options =
+                _.extend(func_ret_options, {
+                    path: SAMPLE_PATH_GMAPS_1,
+                    map: gmap
+                });
+
+            geojson_to_gmaps(feature, gmap, options_func);
+
+            expect(options_func.calls.length).toEqual(1);
+            expect(options_func).toHaveBeenCalledWith(feature);
 
             expect(google.maps.Polyline).toHaveBeenCalledWith(expected_options);
         });
@@ -285,6 +334,27 @@ describe("geojson_to_gmaps()", function() {
                 });
 
             geojson_to_gmaps(feature_collection, gmap, options);
+
+            expect(google.maps.Polyline).toHaveBeenCalledWith(expected_options);
+        });
+
+        it("adds a GeoJSON FeatureCollection with options returned from a function", function() {
+            var func_ret_options = {
+                strokeColor: 'yellow'
+            };
+            var options_func =
+                jasmine.createSpy('options_func').andReturn(func_ret_options);
+
+            var expected_options =
+                _.extend(func_ret_options, {
+                    path: SAMPLE_PATH_GMAPS_1,
+                    map: gmap
+                });
+
+            geojson_to_gmaps(feature_collection, gmap, options_func);
+
+            expect(options_func.calls.length).toEqual(1);
+            expect(options_func).toHaveBeenCalledWith(feature_collection.features[1]);
 
             expect(google.maps.Polyline).toHaveBeenCalledWith(expected_options);
         });
