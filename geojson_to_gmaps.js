@@ -20,7 +20,7 @@
        return JSON.parse(JSON.stringify(original));
     }
 
-    function addLineString(geojson, geojson_coordinates, gmap, options, event_handlers) {
+    function addLineString(geojson, geojson_coordinates, gmap, options, event_handlers, feature) {
         var coordinates = geojson_coordinates_to_gmaps(geojson_coordinates);
         var handler_function;
         var polyline;
@@ -32,7 +32,7 @@
 
         if (event_handlers !== undefined) {
             for (var event_name in event_handlers) {
-                handler_function = bind(event_handlers[event_name], geojson);
+                handler_function = bind(event_handlers[event_name], feature);
                 google.maps.event.addListener(
                         polyline, event_name, handler_function);
             }
@@ -77,14 +77,14 @@
             case "LineString":
                 options = determine_options(gmap_options, current_feature);
                 overlays.push(addLineString(geojson, geojson.coordinates,
-                        gmap, options, event_handlers));
+                        gmap, options, event_handlers,current_feature));
                 break;
             case "MultiLineString":
                 options = determine_options(gmap_options, current_feature);
                 for (i = 0; i < geojson.coordinates.length; i++) {
                     overlays.push(addLineString(geojson,
                             geojson.coordinates[i], gmap, options,
-                            event_handlers));
+                            event_handlers, current_feature));
                 }
                 break;
             case "Feature":
