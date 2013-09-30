@@ -126,11 +126,12 @@ describe("geojson_to_gmaps()", function() {
                 click: click_handler
             };
 
-            google.maps.addListener = jasmine.createSpy('addListener');
+            google.maps.event = {};
+            google.maps.event.addListener = jasmine.createSpy('addListener');
 
             geojson_to_gmaps(line_string, gmap, {}, event_handlers);
 
-            expect(google.maps.addListener).toHaveBeenCalledWith(polyline, 'click', jasmine.any(Function));
+            expect(google.maps.event.addListener).toHaveBeenCalledWith(polyline, 'click', jasmine.any(Function));
         });
     });
 
@@ -265,11 +266,12 @@ describe("geojson_to_gmaps()", function() {
                 click: click_handler
             };
 
-            google.maps.addListener = jasmine.createSpy('addListener');
+            google.maps.event = {};
+            google.maps.event.addListener = jasmine.createSpy('addListener');
 
             geojson_to_gmaps(feature, gmap, {}, event_handlers);
 
-            expect(google.maps.addListener).toHaveBeenCalledWith(polyline, 'click', jasmine.any(Function));
+            expect(google.maps.event.addListener).toHaveBeenCalledWith(polyline, 'click', jasmine.any(Function));
         });
 
         it("returns added overlays", function() {
