@@ -1,6 +1,7 @@
 describe("geojson_to_gmaps()", function() {
     var gmap;
     var polyline;
+    var marker;
 
     // Handy Google Map Samples
     var SAMPLE_PATH_GMAPS_1;
@@ -19,11 +20,13 @@ describe("geojson_to_gmaps()", function() {
     beforeEach(function() {
         gmap = {};
         polyline = {};
+        marker = {};
 
         window.google = {};
         window.google.maps = {};
         window.google.maps.Polyline = jasmine.createSpy("Polyline").andReturn(polyline);
         window.google.maps.LatLng = jasmine.createSpy("LatLng").andCallFake(fakeLatLng);
+        window.google.maps.Marker = jasmine.createSpy("Marker").andReturn(marker);
 
         SAMPLE_PATH_GMAPS_1 = [
             new google.maps.LatLng(0.0, 102.0),
@@ -55,6 +58,9 @@ describe("geojson_to_gmaps()", function() {
             [ 2.0, 102.0 ],
             [ 3.0, 103.0 ]
         ];
+
+        SAMPLE_POINT_GMAPS_1 = new google.maps.LatLng(0.5, 102.0);
+        SAMPLE_POINT_GEOJSON_1 = [102.0, 0.5];
     });
 
     describe("LineString", function() {
@@ -293,7 +299,7 @@ describe("geojson_to_gmaps()", function() {
                 "features": [
                     {
                         "type": "Feature",
-                        "geometry": {"type": "Point", "coordinates": [102.0, 0.5]},
+                        "geometry": {"type": "Point", "coordinates": SAMPLE_POINT_GEOJSON_1},
                         "properties": {"prop0": "value0"}
                     },
                     {
@@ -329,15 +335,21 @@ describe("geojson_to_gmaps()", function() {
             var options = {
                 strokeColor: 'green'
             };
-            var expected_options =
+            var expected_polyline_options =
                 _.extend(options, {
                     path: SAMPLE_PATH_GMAPS_1,
+                    map: gmap
+                });
+            var expected_marker_options =
+                _.extend(options, {
+                    position: SAMPLE_POINT_GMAPS_1,
                     map: gmap
                 });
 
             geojson_to_gmaps(feature_collection, gmap, options);
 
-            expect(google.maps.Polyline).toHaveBeenCalledWith(expected_options);
+            expect(google.maps.Polyline).toHaveBeenCalledWith(expected_polyline_options);
+            expect(google.maps.Marker).toHaveBeenCalledWith(expected_marker_options);
         });
 
         it("adds a GeoJSON FeatureCollection with options returned from a function", function() {
@@ -355,7 +367,7 @@ describe("geojson_to_gmaps()", function() {
 
             geojson_to_gmaps(feature_collection, gmap, options_func);
 
-            expect(options_func.calls.length).toEqual(1);
+            expect(options_func.calls.length).toEqual(2);
             expect(options_func).toHaveBeenCalledWith(feature_collection.features[1]);
 
             expect(google.maps.Polyline).toHaveBeenCalledWith(expected_options);
@@ -366,8 +378,9 @@ describe("geojson_to_gmaps()", function() {
 
             overlays = geojson_to_gmaps(feature_collection, gmap);
 
-            expect(overlays.length).toEqual(1);
+            expect(overlays.length).toEqual(2);
             expect(overlays[0]).toEqual(polyline);
+            expect(overlays[1]).toEqual(marker);
         });
     });
 

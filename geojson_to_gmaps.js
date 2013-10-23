@@ -54,6 +54,17 @@
         return polyline;
     }
 
+    function addPoint(geojson, gmap, options, event_handlers, feature) {
+        options.position =
+            new google.maps.LatLng( geojson.coordinates[1],
+                                    geojson.coordinates[0]);
+        options.map = gmap;
+
+        marker = new google.maps.Marker(options);
+
+        return marker;
+    };
+
     function determine_options(gmap_options, current_feature) {
         var options;
 
@@ -80,7 +91,7 @@
             case "LineString":
                 options = determine_options(gmap_options, current_feature);
                 overlays.push(addLineString(geojson, geojson.coordinates,
-                        gmap, options, event_handlers,current_feature));
+                        gmap, options, event_handlers, current_feature));
                 break;
             case "MultiLineString":
                 options = determine_options(gmap_options, current_feature);
@@ -89,6 +100,11 @@
                             geojson.coordinates[i], gmap, options,
                             event_handlers, current_feature));
                 }
+                break;
+            case "Point":
+                options = determine_options(gmap_options, current_feature);
+                overlays.push(addPoint(geojson, gmap, options, event_handlers,
+                            current_feature));
                 break;
             case "Feature":
                 overlays = overlays.concat(
