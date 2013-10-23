@@ -45,7 +45,7 @@
 
         if (event_handlers !== undefined) {
             for (var event_name in event_handlers) {
-                handler_function = bind(event_handlers[event_name], feature);
+                handler_function = bind(event_handlers[event_name], feature, polyline);
                 google.maps.event.addListener(
                         polyline, event_name, handler_function);
             }
