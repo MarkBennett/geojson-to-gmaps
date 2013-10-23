@@ -389,15 +389,14 @@ describe("geojson_to_gmaps()", function() {
     it("raises an error if the geometry is missing");
 
     describe("bind()", function() {
-        it('binds an extra argument when given a function', function() {
+        it('binds extra arguments when given a function', function() {
             var test_func = jasmine.createSpy('test_func');
-            var extra_arg = 123;
 
-            var bound_func = geojson_to_gmaps.bind(test_func, extra_arg);
+            var bound_func = geojson_to_gmaps.bind(test_func, 123, 'boo');
 
             bound_func('abc');
 
-            expect(test_func).toHaveBeenCalledWith('abc', 123);
+            expect(test_func).toHaveBeenCalledWith('abc', 123, 'boo');
         });
     });
 });
