@@ -9,9 +9,9 @@
        return JSON.parse(JSON.stringify(original));
     }
 
-    // Given a function, return a new function that's binds an extra argument
+    // Given a function, return a new function that's binds a extra arguments
     // to it's argument list when invoked
-    function bind(func, extra_arg) {
+    function bind(func, extra_arg1, extra_arg2, extra_arg3, extra_argX) {
         var extra_args = splice.call(arguments, 1);
 
         return (function() {
