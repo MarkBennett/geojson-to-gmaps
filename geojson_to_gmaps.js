@@ -1,8 +1,25 @@
 (function () {
-    // Handy utitlity functions
+    // utitlity functions
     var push = Array.prototype.push;
     var splice = Array.prototype.splice;
     var concat = Array.prototype.concat;
+
+    // Given a value, produce a deep copy
+    function clone(original) {
+       return JSON.parse(JSON.stringify(original));
+    }
+
+    // Given a function, return a new function that's binds an extra argument
+    // to it's argument list when invoked
+    function bind(func, extra_arg) {
+        var extra_args = splice.call(arguments, 1);
+
+        return (function() {
+            var args = splice.call(arguments, 0);
+            args = args.concat(extra_args);
+            return func.apply(this, args);
+        });
+    }
 
     function geojson_coordinates_to_gmaps(geojson_coords) {
         var gmap_coords = new Array(geojson_coords.length);
@@ -14,10 +31,6 @@
         }
 
         return gmap_coords;
-    }
-
-    function clone(original) {
-       return JSON.parse(JSON.stringify(original));
     }
 
     function addLineString(geojson, geojson_coordinates, gmap, options, event_handlers, feature) {
@@ -39,16 +52,6 @@
         }
 
         return polyline;
-    }
-
-    // Given a function, return a new function that's binds an extra argument
-    // to it's argument list when invoked
-    function bind(func, extra_arg) {
-        return (function() {
-            var args = splice.call(arguments, 0); 
-            args.push(extra_arg);
-            return func.apply(this, args);
-        });
     }
 
     function determine_options(gmap_options, current_feature) {
