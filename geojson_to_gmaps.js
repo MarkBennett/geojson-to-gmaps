@@ -63,7 +63,7 @@
         marker = new google.maps.Marker(options);
 
         return marker;
-    };
+    }
 
     function determine_options(gmap_options, current_feature) {
         var options;
