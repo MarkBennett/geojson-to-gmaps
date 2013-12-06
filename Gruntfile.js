@@ -25,6 +25,15 @@ module.exports = function(grunt) {
                     'geojson_to_gmaps.min.js': ['geojson_to_gmaps.js']
                 }
             }
+        },
+        watch: {
+            scripts: {
+                files: ['geojson_to_gmaps.js'],
+                tasks: ['jshint', 'jasmine', 'uglify'],
+                options: {
+                    spawn: false
+                }
+            }
         }
     });
 
@@ -32,6 +41,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-jasmine');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-contrib-watch');
 
     // Default task(s).
     grunt.registerTask('default', ['jasmine']);
